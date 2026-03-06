@@ -1,0 +1,148 @@
+/* Reset */
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #222;
+}
+
+/* Images */
+img {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+}
+
+/* Hero */
+.hero {
+    background-image: url('images/techquitybanner-1130x160.png');
+    min-height: 35vh;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 2rem;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+.hero-text {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+}
+
+.hero-text h1 {
+    font-size: 3rem;
+    margin: 0;
+}
+
+.hero-text p {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+}
+
+/* Topic sections */
+.topic {
+    margin: 2rem auto 3rem;
+    width: min(1100px, 92%);
+}
+
+.topic-title {
+    background-color: #474747;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+}
+
+.topic-title h1 {
+    margin: 0;
+    font-size: 2rem;
+}
+
+/* Grid layout */
+.topic-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+/* Cards */
+.topic-card {
+    background-color: #474747;
+    color: white;
+    padding: 1rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.topic-card-text {
+    font-size: 1.4rem;
+    text-align: center;
+    margin: 1rem 0 0.5rem;
+}
+
+.topic-card p {
+    text-align: center;
+    line-height: 1.6;
+}
+
+/* Reflection box */
+.reflection {
+    background-color: white;
+    padding: 1.5rem;
+    border-left: 6px solid #6a0dad;
+    border-radius: 12px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    line-height: 1.7;
+}
+
+.reflection h3 {
+    margin-top: 0;
+    color: #6a0dad;
+}
+
+/* Footer */
+.footer {
+    background-color: #474747;
+    color: white;
+    text-align: center;
+    padding: 2rem 1rem;
+    margin-top: 3rem;
+}
+
+/* Tablet */
+@media (min-width: 700px) {
+    .topic-content {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .hero-text h1 {
+        font-size: 3.5rem;
+    }
+}
+
+/* Desktop */
+@media (min-width: 1000px) {
+    .topic-content {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .hero-text h1 {
+        font-size: 4rem;
+    }
+}
