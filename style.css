@@ -6,22 +6,22 @@
 html, body {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #222;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #f6f8fb;
+    color: #1f2933;
 }
 
 /* Images */
 img {
     width: 100%;
     display: block;
-    border-radius: 12px;
+    border-radius: 8px;
 }
 
 /* Hero */
 .hero {
-    background-image: url('images/techquitybanner-1130x160.png');
-    min-height: 35vh;
+    background-image: url('techquitybanner-1130x160.png');
+    min-height: 48vh;
     background-size: cover;
     background-position: center;
     position: relative;
@@ -30,29 +30,59 @@ img {
     align-items: center;
     text-align: center;
     color: white;
-    padding: 2rem;
+    padding: 4rem 1.5rem;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+    background-size: 72px 72px;
+    opacity: 0.45;
 }
 
 .overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.35);
+    background:
+        linear-gradient(135deg, rgba(12, 18, 28, 0.9), rgba(24, 64, 82, 0.76) 52%, rgba(92, 59, 30, 0.7)),
+        rgba(0, 0, 0, 0.2);
 }
 
 .hero-text {
     position: relative;
     z-index: 1;
-    max-width: 800px;
+    max-width: 900px;
+}
+
+.hero-kicker {
+    display: inline-block;
+    margin-bottom: 0.9rem;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid rgba(255, 255, 255, 0.38);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
 }
 
 .hero-text h1 {
-    font-size: 3rem;
+    font-size: 2.5rem;
+    line-height: 1.08;
     margin: 0;
+    text-shadow: 0 4px 18px rgba(0, 0, 0, 0.42);
 }
 
 .hero-text p {
-    font-size: 1.1rem;
+    font-size: 1.08rem;
+    line-height: 1.7;
     margin-top: 1rem;
+    color: #edf6ff;
 }
 
 /* Topic sections */
@@ -62,15 +92,24 @@ img {
 }
 
 .topic-title {
-    background-color: #474747;
+    background: linear-gradient(90deg, #253344, #315e53);
     color: white;
-    padding: 0.8rem 1.5rem;
-    border-radius: 12px;
+    padding: 0.9rem 1.4rem;
+    border-left: 6px solid #f2ad44;
+    border-radius: 8px;
+    box-shadow: 0 8px 22px rgba(31, 41, 51, 0.14);
 }
 
 .topic-title h1 {
     margin: 0;
-    font-size: 2rem;
+    font-size: 1.9rem;
+}
+
+.topic-intro {
+    max-width: 850px;
+    margin-top: 1.2rem;
+    color: #52616f;
+    line-height: 1.7;
 }
 
 /* Grid layout */
@@ -83,11 +122,21 @@ img {
 
 /* Cards */
 .topic-card {
-    background-color: #474747;
-    color: white;
+    background-color: white;
+    color: #1f2933;
     padding: 1rem;
-    border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid #d9e2ec;
+    border-radius: 8px;
+    box-shadow: 0 10px 24px rgba(31, 41, 51, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.topic-card img {
+    height: 280px;
+    object-fit: contain;
+    background: #f3f6fa;
 }
 
 .topic-card-text {
@@ -99,21 +148,39 @@ img {
 .topic-card p {
     text-align: center;
     line-height: 1.6;
+    font-weight: 700;
+    margin: 0;
+}
+
+.blender-topic {
+    margin-top: 3rem;
+}
+
+.blender-card {
+    background: #24272c;
+    color: #f8fafc;
+    border-color: #3a3f47;
+}
+
+.blender-card img {
+    height: 320px;
+    object-fit: contain;
+    background: #303337;
 }
 
 /* Reflection box */
 .reflection {
     background-color: white;
     padding: 1.5rem;
-    border-left: 6px solid #6a0dad;
-    border-radius: 12px;
+    border-left: 6px solid #315e53;
+    border-radius: 8px;
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
     line-height: 1.7;
 }
 
 .reflection h3 {
     margin-top: 0;
-    color: #6a0dad;
+    color: #315e53;
 }
 
 /* Footer */
@@ -131,8 +198,12 @@ img {
         grid-template-columns: repeat(2, 1fr);
     }
 
+    .topic-card img {
+        height: 310px;
+    }
+
     .hero-text h1 {
-        font-size: 3.5rem;
+        font-size: 3.4rem;
     }
 }
 
