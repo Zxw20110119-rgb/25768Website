@@ -18,6 +18,12 @@ img {
     border-radius: 8px;
 }
 
+video {
+    width: 100%;
+    display: block;
+    border-radius: 8px;
+}
+
 /* Hero */
 .hero {
     background-image: url('techquitybanner-1130x160.png');
@@ -166,6 +172,30 @@ img {
     height: 320px;
     object-fit: contain;
     background: #303337;
+}
+
+.blender-video-card {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: #24272c;
+    color: #f8fafc;
+    border: 1px solid #3a3f47;
+    border-radius: 8px;
+    box-shadow: 0 10px 24px rgba(31, 41, 51, 0.1);
+}
+
+.blender-video-card video {
+    aspect-ratio: 16 / 9;
+    max-height: 560px;
+    object-fit: contain;
+    background: #111317;
+}
+
+.blender-video-card p {
+    text-align: center;
+    line-height: 1.6;
+    font-weight: 700;
+    margin: 1rem 0 0;
 }
 
 /* Reflection box */
