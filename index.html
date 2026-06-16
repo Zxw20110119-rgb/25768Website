@@ -8,42 +8,79 @@
     <link rel="icon" href="techquitybanner-1130x160.png">
 </head>
 
-<body>
+<body class="studio-site">
+
+    <header class="site-nav" data-reveal>
+        <a class="site-brand" href="#top" aria-label="Renzo's Creative Tech Studio home">
+            <span class="brand-mark">R</span>
+            <span>Renzo Studio</span>
+        </a>
+
+        <nav class="nav-links" aria-label="Portfolio sections">
+            <a href="#image-editing">Image Editing</a>
+            <a href="#blender">Blender</a>
+            <a href="#animation">Animation</a>
+        </nav>
+    </header>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="top">
         <div class="overlay"></div>
-        <div class="hero-text">
+        <div class="hero-text" data-reveal>
             <span class="hero-kicker">Digital Technology Portfolio</span>
-            <h1>Renzo's Digital Technology Showcase</h1>
-            <p>A collection of what I learnt, created, and improved this year.</p>
+            <h1>Renzo's Creative Tech Studio</h1>
+            <p>
+                A portfolio of edited images, Blender models, and a seed-to-sprout animation
+                shaped with a clean studio style and a small nature-growth theme.
+            </p>
+
+            <div class="hero-actions" aria-label="Portfolio shortcuts">
+                <a class="button button-primary" href="#animation">Watch Animation</a>
+                <a class="button button-secondary" href="#image-editing">View Gallery</a>
+            </div>
+
+            <div class="studio-stats" aria-label="Portfolio highlights">
+                <div>
+                    <strong>03</strong>
+                    <span>Image Edits</span>
+                </div>
+                <div>
+                    <strong>03</strong>
+                    <span>Blender Models</span>
+                </div>
+                <div>
+                    <strong>01</strong>
+                    <span>Growth Animation</span>
+                </div>
+            </div>
         </div>
     </section>
 
     <!-- Topic 1 -->
-    <section class="topic">
-        <div class="topic-title">
-            <h1>Image Editing</h1>
+    <section class="topic" id="image-editing">
+        <div class="topic-title" data-reveal>
+            <span class="section-kicker">Topic 01</span>
+            <h2>Image Editing</h2>
         </div>
 
         <div class="topic-content">
-            <div class="topic-card">
+            <div class="topic-card" data-reveal>
                 <img src="charactor.png" alt="My first image editing task">
                 <p>My Character Creation</p>
             </div>
 
-            <div class="topic-card">
+            <div class="topic-card" data-reveal>
                 <img src="background.png" alt="A second edited design">
                 <p>My Background</p>
             </div>
 
-            <div class="topic-card">
+            <div class="topic-card" data-reveal>
                 <img src="drawing.png" alt="Final edited image">
                 <p>The Snowflake I Made</p>
             </div>
         </div>
 
-        <div class="reflection">
+        <div class="reflection" data-reveal>
             <h3>Reflection</h3>
             <p>
                 In this topic I learnt how to edit images and make them look more professional.
@@ -60,12 +97,13 @@
     </section>
 
     <!-- Topic 2 -->
-    <section class="topic blender-topic">
-        <div class="topic-title">
-            <h1>Blender 3D Modelling</h1>
+    <section class="topic blender-topic" id="blender">
+        <div class="topic-title" data-reveal>
+            <span class="section-kicker">Topic 02</span>
+            <h2>Blender 3D Modelling</h2>
         </div>
 
-        <div class="topic-intro">
+        <div class="topic-intro" data-reveal>
             <p>
                 These are 3D models I created in Blender. I focused on simple shapes,
                 clean colours, lighting, and making each object look clear in the final render.
@@ -73,30 +111,52 @@
         </div>
 
         <div class="topic-content blender-gallery">
-            <div class="topic-card blender-card">
+            <div class="topic-card blender-card" data-reveal>
                 <img src="images/blender-girl.jpg" alt="Blender girl character model">
                 <p>Girl Character Model</p>
             </div>
 
-            <div class="topic-card blender-card">
+            <div class="topic-card blender-card" data-reveal>
                 <img src="images/blender-leaf.jpg" alt="Blender leaf model">
                 <p>Leaf Model</p>
             </div>
 
-            <div class="topic-card blender-card">
+            <div class="topic-card blender-card" data-reveal>
                 <img src="images/blender-tree.jpg" alt="Blender tree model">
                 <p>Tree Model</p>
             </div>
         </div>
 
-        <div class="blender-video-card">
-            <video controls preload="metadata" playsinline>
-                <source src="images/seed-to-sprout.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            <p>Seed to Sprout Animation</p>
+        <div class="growth-video" id="animation" data-reveal>
+            <div class="growth-copy">
+                <span class="section-kicker">Animation Study</span>
+                <h3>Seed to Sprout</h3>
+                <p>
+                    This video turns the Blender section into a small growth story,
+                    connecting the leaf and tree models with an animated process.
+                </p>
+
+                <div class="growth-stages" aria-label="Animation stages">
+                    <span>Seed</span>
+                    <span>Light</span>
+                    <span>Sprout</span>
+                </div>
+            </div>
+
+            <div class="blender-video-card">
+                <video controls preload="metadata" playsinline>
+                    <source src="images/seed-to-sprout.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p>Seed to Sprout Animation</p>
+            </div>
         </div>
     </section>
 
+    <footer class="footer">
+        <p>Renzo's Digital Technology Showcase</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
