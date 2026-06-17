@@ -1,6 +1,27 @@
 document.documentElement.classList.add("js");
 
 const revealItems = document.querySelectorAll("[data-reveal]");
+const root = document.documentElement;
+let scrollFrame = null;
+
+function updateScrollProgress() {
+    const maxScroll = Math.max(1, root.scrollHeight - window.innerHeight);
+    const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
+
+    root.style.setProperty("--scroll-progress", progress.toFixed(4));
+    root.dataset.scrollProgress = progress.toFixed(3);
+    scrollFrame = null;
+}
+
+function requestScrollProgressUpdate() {
+    if (scrollFrame === null) {
+        scrollFrame = window.requestAnimationFrame(updateScrollProgress);
+    }
+}
+
+window.addEventListener("scroll", requestScrollProgressUpdate, { passive: true });
+window.addEventListener("resize", requestScrollProgressUpdate);
+updateScrollProgress();
 
 if ("IntersectionObserver" in window) {
     const revealObserver = new IntersectionObserver(
@@ -13,8 +34,8 @@ if ("IntersectionObserver" in window) {
             });
         },
         {
-            rootMargin: "0px 0px -12% 0px",
-            threshold: 0.15,
+            rootMargin: "0px 0px -2% 0px",
+            threshold: 0.05,
         }
     );
 
@@ -66,3 +87,9 @@ document.querySelectorAll(".growth-video video").forEach((video) => {
         panel.classList.remove("is-playing");
     });
 });
+
+window.setTimeout(() => {
+    if (document.documentElement.dataset.threeReady !== "true") {
+        document.body.classList.add("is-webgl-unavailable");
+    }
+}, 5000);

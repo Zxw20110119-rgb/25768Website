@@ -3,14 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Renzo's Digital Technology Showcase</title>
+    <meta name="theme-color" content="#08100c">
+    <title>Renzo's Creative Tech Studio</title>
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="techquitybanner-1130x160.png">
 </head>
 
 <body class="studio-site">
+    <canvas id="bg" aria-hidden="true"></canvas>
 
-    <header class="site-nav" data-reveal>
+    <div class="webgl-fallback" id="webgl-fallback" role="status">
+        The 3D background is unavailable, but the portfolio remains fully accessible.
+    </div>
+
+    <div class="scroll-meter" aria-hidden="true">
+        <span></span>
+    </div>
+
+    <header class="site-nav">
         <a class="site-brand" href="#top" aria-label="Renzo's Creative Tech Studio home">
             <span class="brand-mark">R</span>
             <span>Renzo Studio</span>
@@ -23,15 +33,13 @@
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero" id="top">
-        <div class="overlay"></div>
-        <div class="hero-text" data-reveal>
+    <main class="portfolio-story">
+        <section class="story-panel hero-panel" id="top" data-scene="intro" data-reveal>
             <span class="hero-kicker">Digital Technology Portfolio</span>
             <h1>Renzo's Creative Tech Studio</h1>
-            <p>
-                A portfolio of edited images, Blender models, and a seed-to-sprout animation
-                shaped with a clean studio style and a small nature-growth theme.
+            <p class="hero-summary">
+                A collection of edited images, Blender models, and a seed-to-sprout animation,
+                presented as a growing digital world.
             </p>
 
             <div class="hero-actions" aria-label="Portfolio shortcuts">
@@ -53,35 +61,35 @@
                     <span>Growth Animation</span>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Topic 1 -->
-    <section class="topic" id="image-editing">
-        <div class="topic-title" data-reveal>
-            <span class="section-kicker">Topic 01</span>
-            <h2>Image Editing</h2>
-        </div>
-
-        <div class="topic-content">
-            <div class="topic-card" data-reveal>
-                <img src="charactor.png" alt="My first image editing task">
-                <p>My Character Creation</p>
+        <section class="story-panel panel-left gallery-panel" id="image-editing" data-scene="editing">
+            <div class="panel-heading">
+                <span class="section-kicker">Topic 01</span>
+                <h2>Image Editing</h2>
             </div>
 
-            <div class="topic-card" data-reveal>
-                <img src="background.png" alt="A second edited design">
-                <p>My Background</p>
-            </div>
+            <div class="art-grid">
+                <figure class="artwork">
+                    <img src="charactor.png" alt="My first image editing task">
+                    <figcaption>My Character Creation</figcaption>
+                </figure>
 
-            <div class="topic-card" data-reveal>
-                <img src="drawing.png" alt="Final edited image">
-                <p>The Snowflake I Made</p>
-            </div>
-        </div>
+                <figure class="artwork">
+                    <img src="background.png" alt="A second edited design">
+                    <figcaption>My Background</figcaption>
+                </figure>
 
-        <div class="reflection" data-reveal>
-            <h3>Reflection</h3>
+                <figure class="artwork">
+                    <img src="drawing.png" alt="Final edited image">
+                    <figcaption>The Snowflake I Made</figcaption>
+                </figure>
+            </div>
+        </section>
+
+        <aside class="story-panel panel-right reflection-panel" data-scene="reflection" data-reveal>
+            <span class="section-kicker">Process Notes</span>
+            <h2>Reflection</h2>
             <p>
                 In this topic I learnt how to edit images and make them look more professional.
                 I practised cropping, resizing, and improving the overall appearance of pictures.
@@ -93,47 +101,44 @@
                 look messy. Next time, I would spend more time planning my design before editing so the
                 final result is even stronger.
             </p>
-        </div>
-    </section>
+        </aside>
 
-    <!-- Topic 2 -->
-    <section class="topic blender-topic" id="blender">
-        <div class="topic-title" data-reveal>
-            <span class="section-kicker">Topic 02</span>
-            <h2>Blender 3D Modelling</h2>
-        </div>
+        <section class="story-panel panel-wide blender-panel" id="blender" data-scene="models" data-reveal>
+            <div class="panel-heading">
+                <span class="section-kicker">Topic 02</span>
+                <h2>Blender 3D Modelling</h2>
+            </div>
 
-        <div class="topic-intro" data-reveal>
-            <p>
+            <p class="panel-intro">
                 These are 3D models I created in Blender. I focused on simple shapes,
                 clean colours, lighting, and making each object look clear in the final render.
             </p>
-        </div>
 
-        <div class="topic-content blender-gallery">
-            <div class="topic-card blender-card" data-reveal>
-                <img src="images/blender-girl.jpg" alt="Blender girl character model">
-                <p>Girl Character Model</p>
+            <div class="art-grid blender-gallery">
+                <figure class="artwork blender-artwork">
+                    <img src="images/blender-girl.jpg" alt="Blender girl character model">
+                    <figcaption>Girl Character Model</figcaption>
+                </figure>
+
+                <figure class="artwork blender-artwork">
+                    <img src="images/blender-leaf.jpg" alt="Blender leaf model">
+                    <figcaption>Leaf Model</figcaption>
+                </figure>
+
+                <figure class="artwork blender-artwork">
+                    <img src="images/blender-tree.jpg" alt="Blender tree model">
+                    <figcaption>Tree Model</figcaption>
+                </figure>
             </div>
+        </section>
 
-            <div class="topic-card blender-card" data-reveal>
-                <img src="images/blender-leaf.jpg" alt="Blender leaf model">
-                <p>Leaf Model</p>
-            </div>
-
-            <div class="topic-card blender-card" data-reveal>
-                <img src="images/blender-tree.jpg" alt="Blender tree model">
-                <p>Tree Model</p>
-            </div>
-        </div>
-
-        <div class="growth-video" id="animation" data-reveal>
+        <section class="story-panel panel-right growth-video" id="animation" data-scene="growth" data-reveal>
             <div class="growth-copy">
                 <span class="section-kicker">Animation Study</span>
-                <h3>Seed to Sprout</h3>
+                <h2>Seed to Sprout</h2>
                 <p>
-                    This video turns the Blender section into a small growth story,
-                    connecting the leaf and tree models with an animated process.
+                    This animation connects the leaf and tree models through a short growth story,
+                    moving from a small seed toward a finished plant.
                 </p>
 
                 <div class="growth-stages" aria-label="Animation stages">
@@ -143,20 +148,22 @@
                 </div>
             </div>
 
-            <div class="blender-video-card">
+            <div class="video-frame">
                 <video controls preload="metadata" playsinline>
                     <source src="images/seed-to-sprout.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
                 <p>Seed to Sprout Animation</p>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <footer class="footer">
-        <p>Renzo's Digital Technology Showcase</p>
-    </footer>
+        <footer class="story-panel footer-panel" data-scene="complete" data-reveal>
+            <span class="section-kicker">Portfolio Complete</span>
+            <p>Renzo's Digital Technology Showcase</p>
+        </footer>
+    </main>
 
     <script src="script.js"></script>
+    <script type="module" src="three-scene.js"></script>
 </body>
 </html>
