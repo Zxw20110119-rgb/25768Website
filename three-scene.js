@@ -126,7 +126,7 @@ const particles = new THREE.Points(
 world.add(particles);
 
 const plantGroup = new THREE.Group();
-plantGroup.position.set(narrowScreen ? -1 : -5.8, -7.5, -5);
+plantGroup.position.set(narrowScreen ? -0.6 : 6.2, -7.5, -5);
 world.add(plantGroup);
 
 const stemMaterial = new THREE.MeshStandardMaterial({
@@ -261,6 +261,9 @@ function applySceneProgress(progress, elapsed) {
     world.rotation.x = Math.sin(progress * Math.PI) * 0.08;
 
     seedGroup.scale.setScalar(seedFade);
+    seedGroup.position.x = narrowScreen
+        ? 0.4
+        : THREE.MathUtils.lerp(5.6, -5.2, smoothstep(0.24, 0.46, progress));
     seedGroup.position.y = 1.2 + Math.sin(elapsed * 0.7) * (reducedMotion ? 0 : 0.22);
     seed.rotation.x = 0.3 + elapsed * (reducedMotion ? 0 : 0.14);
     seed.rotation.y = 0.2 + progress * 2.4;
@@ -295,6 +298,13 @@ function applySceneProgress(progress, elapsed) {
 
     groundRing.scale.setScalar(0.2 + growth * 0.8);
     groundRing.material.opacity = 0.12 + growth * 0.58;
+    const plantLaneProgress = smoothstep(0.64, 0.8, progress);
+    plantGroup.position.x = narrowScreen
+        ? -0.6
+        : THREE.MathUtils.lerp(6.2, -10, plantLaneProgress);
+    plantGroup.position.z = narrowScreen
+        ? -5
+        : THREE.MathUtils.lerp(-5, -8, plantLaneProgress);
     plantGroup.rotation.y = -0.6 + progress * 0.95;
 }
 

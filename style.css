@@ -1,6 +1,6 @@
 :root {
     --studio-ink: #08100c;
-    --studio-panel: rgba(11, 19, 15, 0.88);
+    --studio-panel: rgba(11, 19, 15, 0.72);
     --studio-panel-strong: rgba(8, 14, 11, 0.95);
     --studio-text: #edf7f0;
     --studio-muted: #a9b9ae;
@@ -11,6 +11,12 @@
     --line: rgba(221, 246, 229, 0.17);
     --shadow: 0 24px 70px rgba(0, 0, 0, 0.36);
     --scroll-progress: 0;
+}
+
+@property --glow-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
 }
 
 * {
@@ -198,13 +204,56 @@ video {
 
 .story-panel {
     position: relative;
+    isolation: isolate;
+    --glow-angle: 0deg;
     border: 1px solid var(--line);
     border-radius: 8px;
     background:
         linear-gradient(145deg, rgba(255, 255, 255, 0.045), transparent 36%),
         var(--studio-panel);
     box-shadow: var(--shadow);
-    backdrop-filter: blur(18px);
+    backdrop-filter: blur(10px);
+}
+
+.story-panel::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: 1;
+    padding: 1px;
+    pointer-events: none;
+    border-radius: inherit;
+    background: conic-gradient(
+        from var(--glow-angle),
+        transparent 0deg,
+        rgba(107, 212, 143, 0.2) 70deg,
+        rgba(97, 199, 215, 0.95) 118deg,
+        rgba(242, 173, 68, 0.58) 160deg,
+        transparent 220deg
+    );
+    opacity: 0;
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    transition: opacity 260ms ease;
+}
+
+.story-panel > * {
+    position: relative;
+    z-index: 2;
+}
+
+.story-panel.is-scene-active::before {
+    opacity: 1;
+    animation: panel-border-glow 5.5s linear infinite;
+}
+
+@keyframes panel-border-glow {
+    to {
+        --glow-angle: 360deg;
+    }
 }
 
 .hero-panel {
@@ -258,6 +307,9 @@ video {
 }
 
 .button {
+    --magnet-x: 0px;
+    --magnet-y: 0px;
+    --button-lift: 0px;
     min-height: 44px;
     display: inline-flex;
     align-items: center;
@@ -266,11 +318,16 @@ video {
     border: 1px solid var(--line);
     border-radius: 8px;
     font-weight: 800;
+    transform: translate3d(
+        var(--magnet-x),
+        calc(var(--magnet-y) - var(--button-lift)),
+        0
+    );
     transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
 }
 
 .button:hover {
-    transform: translateY(-3px);
+    --button-lift: 3px;
 }
 
 .button-primary {
@@ -311,15 +368,15 @@ video {
 }
 
 .panel-left {
-    grid-column: 1 / span 8;
+    grid-column: 1 / span 7;
 }
 
 .panel-right {
-    grid-column: 6 / span 7;
+    grid-column: 7 / span 6;
 }
 
 .panel-wide {
-    grid-column: 2 / span 10;
+    grid-column: 1 / span 7;
 }
 
 .gallery-panel,
@@ -377,20 +434,34 @@ video {
 }
 
 .artwork {
+    --tilt-x: 0deg;
+    --tilt-y: 0deg;
+    --tilt-lift: 0px;
     min-width: 0;
     margin: 0;
+    transform:
+        perspective(900px)
+        rotateX(var(--tilt-x))
+        rotateY(var(--tilt-y))
+        translateY(var(--tilt-lift));
+    transform-style: preserve-3d;
+    transition: transform 180ms ease;
 }
 
 .artwork img {
-    height: 280px;
+    height: 240px;
     object-fit: contain;
     border: 1px solid rgba(255, 255, 255, 0.12);
     background: rgba(240, 247, 242, 0.94);
     transition: transform 240ms ease, border-color 240ms ease, box-shadow 240ms ease;
 }
 
+.artwork:hover {
+    --tilt-lift: -7px;
+}
+
 .artwork:hover img {
-    transform: translateY(-8px) rotateX(1.5deg);
+    transform: scale(1.015);
     border-color: rgba(107, 212, 143, 0.58);
     box-shadow: 0 22px 48px rgba(0, 0, 0, 0.34);
 }
@@ -403,7 +474,7 @@ video {
 }
 
 .blender-artwork img {
-    height: 320px;
+    height: 235px;
     background: rgba(3, 8, 5, 0.78);
 }
 
@@ -464,7 +535,8 @@ video {
 
 .footer-panel {
     grid-column: 3 / span 8;
-    margin-bottom: 10vh;
+    margin-top: 18vh;
+    margin-bottom: 55vh;
     padding: 2.5rem 1.5rem;
     text-align: center;
 }
@@ -472,6 +544,52 @@ video {
 .footer-panel p {
     margin: 1rem 0 0;
     color: var(--studio-muted);
+}
+
+[data-scroll-float],
+[data-word-reveal] {
+    white-space: normal;
+}
+
+.animated-text-ready .float-word,
+.animated-text-ready .reveal-word {
+    display: inline-block;
+    will-change: opacity, transform, filter;
+}
+
+.animated-text-ready .float-word {
+    opacity: 0;
+    filter: blur(7px);
+    transform: translateY(0.75em) scaleY(0.84);
+    transform-origin: 50% 100%;
+    transition:
+        opacity 520ms ease,
+        filter 620ms ease,
+        transform 620ms cubic-bezier(0.2, 0.75, 0.25, 1);
+    transition-delay: calc(var(--word-index) * 55ms);
+}
+
+.animated-text-ready.is-text-visible .float-word {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0) scaleY(1);
+}
+
+.animated-text-ready .reveal-word {
+    opacity: 0.16;
+    filter: blur(3px);
+    transform: translateY(0.28em);
+    transition:
+        opacity 440ms ease,
+        filter 520ms ease,
+        transform 520ms ease;
+    transition-delay: calc(var(--word-index) * 20ms);
+}
+
+.animated-text-ready.is-text-visible .reveal-word {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
 }
 
 .js [data-reveal] {
@@ -496,15 +614,15 @@ video {
     }
 
     .panel-left {
-        grid-column: 1 / span 10;
+        grid-column: 1 / span 8;
     }
 
     .panel-right {
-        grid-column: 4 / span 9;
+        grid-column: 5 / span 8;
     }
 
     .panel-wide {
-        grid-column: 1 / span 12;
+        grid-column: 1 / span 8;
     }
 
     .art-grid {
@@ -551,7 +669,7 @@ video {
         width: 100%;
         background:
             linear-gradient(145deg, rgba(255, 255, 255, 0.04), transparent 36%),
-            rgba(8, 14, 11, 0.84);
+            rgba(8, 14, 11, 0.68);
     }
 
     .hero-panel {
@@ -651,6 +769,35 @@ video {
     .artwork:hover img,
     .button:hover,
     .video-frame:hover {
+        transform: none;
+    }
+
+    .story-panel.is-scene-active::before {
+        animation: none;
+    }
+
+    .animated-text-ready .float-word,
+    .animated-text-ready .reveal-word {
+        opacity: 1;
+        filter: none;
+        transform: none;
+    }
+}
+
+@media (hover: none), (pointer: coarse) {
+    .artwork,
+    .artwork:hover,
+    .button,
+    .button:hover {
+        --tilt-x: 0deg;
+        --tilt-y: 0deg;
+        --tilt-lift: 0px;
+        --magnet-x: 0px;
+        --magnet-y: 0px;
+        --button-lift: 0px;
+    }
+
+    .artwork:hover img {
         transform: none;
     }
 }

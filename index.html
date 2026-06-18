@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#08100c">
     <title>Renzo's Creative Tech Studio</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=4">
     <link rel="icon" href="techquitybanner-1130x160.png">
 </head>
 
@@ -36,15 +36,15 @@
     <main class="portfolio-story">
         <section class="story-panel hero-panel" id="top" data-scene="intro" data-reveal>
             <span class="hero-kicker">Digital Technology Portfolio</span>
-            <h1>Renzo's Creative Tech Studio</h1>
-            <p class="hero-summary">
+            <h1 data-scroll-float>Renzo's Creative Tech Studio</h1>
+            <p class="hero-summary" data-word-reveal>
                 A collection of edited images, Blender models, and a seed-to-sprout animation,
                 presented as a growing digital world.
             </p>
 
             <div class="hero-actions" aria-label="Portfolio shortcuts">
-                <a class="button button-primary" href="#animation">Watch Animation</a>
-                <a class="button button-secondary" href="#image-editing">View Gallery</a>
+                <a class="button button-primary" href="#animation" data-magnet>Watch Animation</a>
+                <a class="button button-secondary" href="#image-editing" data-magnet>View Gallery</a>
             </div>
 
             <div class="studio-stats" aria-label="Portfolio highlights">
@@ -66,21 +66,21 @@
         <section class="story-panel panel-left gallery-panel" id="image-editing" data-scene="editing">
             <div class="panel-heading">
                 <span class="section-kicker">Topic 01</span>
-                <h2>Image Editing</h2>
+                <h2 data-scroll-float>Image Editing</h2>
             </div>
 
             <div class="art-grid">
-                <figure class="artwork">
+                <figure class="artwork" data-tilt>
                     <img src="charactor.png" alt="My first image editing task">
                     <figcaption>My Character Creation</figcaption>
                 </figure>
 
-                <figure class="artwork">
+                <figure class="artwork" data-tilt>
                     <img src="background.png" alt="A second edited design">
                     <figcaption>My Background</figcaption>
                 </figure>
 
-                <figure class="artwork">
+                <figure class="artwork" data-tilt>
                     <img src="drawing.png" alt="Final edited image">
                     <figcaption>The Snowflake I Made</figcaption>
                 </figure>
@@ -89,54 +89,54 @@
 
         <aside class="story-panel panel-right reflection-panel" data-scene="reflection" data-reveal>
             <span class="section-kicker">Process Notes</span>
-            <h2>Reflection</h2>
-            <p>
+            <h2 data-scroll-float>Reflection</h2>
+            <p data-word-reveal>
                 In this topic I learnt how to edit images and make them look more professional.
                 I practised cropping, resizing, and improving the overall appearance of pictures.
                 What worked well was experimenting with different tools and seeing how small changes
                 could make a big difference.
             </p>
-            <p>
+            <p data-word-reveal>
                 One challenge I had was choosing the best colours and effects without making the design
                 look messy. Next time, I would spend more time planning my design before editing so the
                 final result is even stronger.
             </p>
         </aside>
 
-        <section class="story-panel panel-wide blender-panel" id="blender" data-scene="models" data-reveal>
+        <section class="story-panel panel-left blender-panel" id="blender" data-scene="models" data-reveal>
             <div class="panel-heading">
                 <span class="section-kicker">Topic 02</span>
-                <h2>Blender 3D Modelling</h2>
+                <h2 data-scroll-float>Blender 3D Modelling</h2>
             </div>
 
-            <p class="panel-intro">
+            <p class="panel-intro" data-word-reveal>
                 These are 3D models I created in Blender. I focused on simple shapes,
                 clean colours, lighting, and making each object look clear in the final render.
             </p>
 
             <div class="art-grid blender-gallery">
-                <figure class="artwork blender-artwork">
+                <figure class="artwork blender-artwork" data-tilt>
                     <img src="images/blender-girl.jpg" alt="Blender girl character model">
                     <figcaption>Girl Character Model</figcaption>
                 </figure>
 
-                <figure class="artwork blender-artwork">
+                <figure class="artwork blender-artwork" data-tilt>
                     <img src="images/blender-leaf.jpg" alt="Blender leaf model">
                     <figcaption>Leaf Model</figcaption>
                 </figure>
 
-                <figure class="artwork blender-artwork">
+                <figure class="artwork blender-artwork" data-tilt>
                     <img src="images/blender-tree.jpg" alt="Blender tree model">
                     <figcaption>Tree Model</figcaption>
                 </figure>
             </div>
         </section>
 
-        <section class="story-panel panel-right growth-video" id="animation" data-scene="growth" data-reveal>
+        <section class="story-panel panel-left growth-video" id="animation" data-scene="growth" data-reveal>
             <div class="growth-copy">
                 <span class="section-kicker">Animation Study</span>
-                <h2>Seed to Sprout</h2>
-                <p>
+                <h2 data-scroll-float>Seed to Sprout</h2>
+                <p data-word-reveal>
                     This animation connects the leaf and tree models through a short growth story,
                     moving from a small seed toward a finished plant.
                 </p>
@@ -163,7 +163,7 @@
         </footer>
     </main>
 
-    <script src="script.js"></script>
-    <script type="module" src="three-scene.js"></script>
+    <script src="script.js?v=4"></script>
+    <script type="module" src="three-scene.js?v=4"></script>
 </body>
 </html>
