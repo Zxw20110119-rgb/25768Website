@@ -343,7 +343,7 @@ video {
 .studio-stats {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 0.75rem;
     margin-top: 2rem;
 }
@@ -382,6 +382,7 @@ video {
 .gallery-panel,
 .reflection-panel,
 .blender-panel,
+.fusion-panel,
 .growth-video {
     margin-bottom: 38vh;
     padding: clamp(1.25rem, 3vw, 2.25rem);
@@ -476,6 +477,16 @@ video {
 .blender-artwork img {
     height: 235px;
     background: rgba(3, 8, 5, 0.78);
+}
+
+.fusion-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.fusion-artwork img {
+    height: 265px;
+    object-fit: contain;
+    background: rgba(240, 247, 242, 0.94);
 }
 
 .growth-video {
@@ -633,6 +644,10 @@ video {
         grid-column: 1 / -1;
     }
 
+    .fusion-gallery .artwork:last-child {
+        grid-column: auto;
+    }
+
     .growth-video {
         grid-template-columns: 1fr;
     }
@@ -701,7 +716,7 @@ video {
     }
 
     .studio-stats {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 0.3rem;
         margin-top: 1.2rem;
     }
@@ -726,6 +741,10 @@ video {
         grid-column: auto;
     }
 
+    .fusion-gallery {
+        grid-template-columns: 1fr;
+    }
+
     .panel-heading {
         display: block;
     }
@@ -737,6 +756,7 @@ video {
     .gallery-panel,
     .reflection-panel,
     .blender-panel,
+    .fusion-panel,
     .growth-video {
         margin-bottom: 28vh;
         padding: 1.1rem;
