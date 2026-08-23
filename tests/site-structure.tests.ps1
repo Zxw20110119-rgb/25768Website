@@ -31,6 +31,26 @@ Assert-Present 'right Blender panel' $index 'class="story-panel panel-right blen
 Assert-Present 'left Fusion panel' $index 'class="story-panel panel-left fusion-panel"'
 Assert-Present 'right animation panel' $index 'class="story-panel panel-right growth-video"'
 
+$fusionArtworkCount = [regex]::Matches($index, 'class="artwork fusion-artwork"').Count
+if ($fusionArtworkCount -ne 4) {
+    $failures.Add("Expected 4 Fusion artworks, found $fusionArtworkCount")
+}
+
+Assert-Present 'interlocking bracket image' $index 'images/fusion-interlocking-bracket\.png'
+Assert-Present 'leaf structure image' $index 'images/fusion-leaf-structure\.png'
+Assert-Present 'interlocking bracket caption' $index '<figcaption>Interlocking Bracket Model</figcaption>'
+Assert-Present 'leaf structure caption' $index '<figcaption>Leaf Structure Model</figcaption>'
+Assert-Present 'interlocking bracket alt text' $index 'alt="Autodesk Fusion interlocking bracket model"'
+Assert-Present 'leaf structure alt text' $index 'alt="Autodesk Fusion leaf structure model"'
+
+if (-not (Test-Path (Join-Path $projectRoot 'images/fusion-interlocking-bracket.png'))) {
+    $failures.Add('Missing interlocking bracket image file')
+}
+
+if (-not (Test-Path (Join-Path $projectRoot 'images/fusion-leaf-structure.png'))) {
+    $failures.Add('Missing leaf structure image file')
+}
+
 Assert-Present 'curved stem path' $scene 'THREE\.CatmullRomCurve3'
 Assert-Present 'tubular stem geometry' $scene 'THREE\.TubeGeometry'
 Assert-Present 'tapered leaf geometry' $scene 'THREE\.ShapeGeometry'
@@ -49,4 +69,4 @@ if ($failures.Count -gt 0) {
     exit 1
 }
 
-Write-Host 'PASS (21 checks)'
+Write-Host 'PASS (30 checks)'
