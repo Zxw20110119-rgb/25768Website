@@ -119,8 +119,10 @@ const particles = new THREE.Points(
         size: narrowScreen ? 0.09 : 0.12,
         vertexColors: true,
         transparent: true,
-        opacity: 0.8,
+        opacity: 0.72,
         sizeAttenuation: true,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false,
     })
 );
 world.add(particles);
@@ -145,64 +147,104 @@ const youngLeafMaterial = new THREE.MeshStandardMaterial({
     emissive: 0x164e2b,
     emissiveIntensity: 0.45,
     roughness: 0.52,
+    side: THREE.DoubleSide,
 });
+leafMaterial.side = THREE.DoubleSide;
 
-const stemPivot = new THREE.Group();
-plantGroup.add(stemPivot);
+function makeTube(points, radius, material, tubularSegments = 48) {
+    const curve = new THREE.CatmullRomCurve3(
+        points.map(([x, y, z]) => new THREE.Vector3(x, y, z))
+    );
+    return new THREE.Mesh(
+        new THREE.TubeGeometry(curve, tubularSegments, radius, narrowScreen ? 7 : 10, false),
+        material
+    );
+}
 
-const stem = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.28, 0.52, 9.5, 14),
-    stemMaterial
+function makeLeaf(material) {
+    const shape = new THREE.Shape();
+    shape.moveTo(0, 0);
+    shape.bezierCurveTo(0.9, 0.35, 1.18, 1.55, 0, 2.8);
+    shape.bezierCurveTo(-1.18, 1.55, -0.9, 0.35, 0, 0);
+
+    const geometry = new THREE.ShapeGeometry(shape, narrowScreen ? 8 : 14);
+    geometry.translate(0, -0.12, 0);
+
+    const group = new THREE.Group();
+    const blade = new THREE.Mesh(geometry, material);
+    blade.rotation.x = -0.12;
+    group.add(blade);
+
+    const vein = makeTube(
+        [[0, 0.08, 0.018], [0.02, 1.1, 0.025], [0, 2.45, 0.018]],
+        0.025,
+        stemMaterial,
+        16
+    );
+    group.add(vein);
+    return group;
+}
+
+const stemGrowth = new THREE.Group();
+const stemRadius = narrowScreen ? 0.18 : 0.24;
+const stem = makeTube(
+    [[0, 0, 0], [0.22, 2.1, 0.06], [-0.25, 4.5, -0.08], [0.34, 6.9, 0.08], [0.02, 9.7, 0]],
+    stemRadius,
+    stemMaterial,
+    narrowScreen ? 40 : 64
 );
-stem.position.y = 4.75;
-stemPivot.add(stem);
-
-const branchData = [
-    { y: 3.7, x: 1.25, rotation: -0.82, length: 3.1 },
-    { y: 5.5, x: -1.2, rotation: 0.82, length: 3 },
-    { y: 7.1, x: 1.05, rotation: -0.72, length: 2.6 },
-];
+stemGrowth.add(stem);
+plantGroup.add(stemGrowth);
 
 const branches = [];
 const leaves = [];
+const branchData = [
+    { y: 3.15, side: 1, length: 2.9, start: 0.47 },
+    { y: 4.85, side: -1, length: 3.05, start: 0.55 },
+    { y: 6.55, side: 1, length: 2.65, start: 0.63 },
+    { y: 8.05, side: -1, length: 2.15, start: 0.7 },
+];
 
 branchData.forEach((config, index) => {
-    const branchPivot = new THREE.Group();
-    branchPivot.position.set(0, config.y, 0);
-    branchPivot.rotation.z = config.rotation;
-
-    const branch = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.11, 0.2, config.length, 10),
-        stemMaterial
+    const branchGroup = new THREE.Group();
+    branchGroup.position.set(index % 2 === 0 ? -0.08 : 0.08, config.y, 0);
+    const tipX = config.side * config.length;
+    const branch = makeTube(
+        [[0, 0, 0], [tipX * 0.45, 0.65, 0.08], [tipX, 1.25, index % 2 ? -0.08 : 0.08]],
+        narrowScreen ? 0.105 : 0.13,
+        stemMaterial,
+        narrowScreen ? 22 : 30
     );
-    branch.position.y = config.length / 2;
-    branchPivot.add(branch);
-    plantGroup.add(branchPivot);
-    branches.push(branchPivot);
+    branchGroup.add(branch);
 
-    const leaf = new THREE.Mesh(
-        new THREE.SphereGeometry(1, 24, 16),
-        index === branchData.length - 1 ? youngLeafMaterial : leafMaterial
-    );
-    leaf.position.y = config.length;
-    leaf.scale.set(1.55, 0.3, 0.74);
-    leaf.rotation.z = index % 2 === 0 ? 0.35 : -0.35;
-    branchPivot.add(leaf);
+    const leaf = makeLeaf(index >= 2 ? youngLeafMaterial : leafMaterial);
+    leaf.position.set(tipX, 1.12, 0.04);
+    leaf.rotation.z = config.side > 0 ? -0.7 : 0.7;
+    leaf.rotation.y = config.side > 0 ? -0.18 : 0.18;
+    leaf.userData.baseRotation = leaf.rotation.z;
+    leaf.userData.start = config.start + 0.045;
+    leaf.userData.scale = index >= 2 ? 0.82 : 0.96;
+    branchGroup.add(leaf);
+
+    branchGroup.userData.start = config.start;
+    branchGroup.userData.baseRotation = 0;
+    branches.push(branchGroup);
     leaves.push(leaf);
+    plantGroup.add(branchGroup);
 });
 
-const crownLeaves = [];
-
 [
-    { position: [0.82, 9.2, 0], rotation: [0, 0.2, -0.45] },
-    { position: [-0.82, 9.15, 0.1], rotation: [0, -0.2, 0.45] },
+    { x: 0.18, y: 9.05, side: 1, rotation: -0.5, start: 0.77 },
+    { x: -0.18, y: 8.98, side: -1, rotation: 0.5, start: 0.8 },
 ].forEach((config) => {
-    const leaf = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 16), youngLeafMaterial);
-    leaf.position.set(...config.position);
-    leaf.rotation.set(...config.rotation);
-    leaf.scale.set(1.65, 0.34, 0.82);
+    const leaf = makeLeaf(youngLeafMaterial);
+    leaf.position.set(config.x, config.y, 0.02);
+    leaf.rotation.z = config.rotation;
+    leaf.rotation.y = config.side * -0.2;
+    leaf.userData.baseRotation = config.rotation;
+    leaf.userData.start = config.start;
+    leaf.userData.scale = 0.9;
     plantGroup.add(leaf);
-    crownLeaves.push(leaf);
     leaves.push(leaf);
 });
 
@@ -224,6 +266,7 @@ let targetProgress = 0;
 let currentProgress = 0;
 let frameCount = 0;
 let pageVisible = !document.hidden;
+let animationFrame = null;
 
 function clamp01(value) {
     return Math.min(1, Math.max(0, value));
@@ -232,6 +275,28 @@ function clamp01(value) {
 function smoothstep(edge0, edge1, value) {
     const normalized = clamp01((value - edge0) / (edge1 - edge0));
     return normalized * normalized * (3 - 2 * normalized);
+}
+
+function getSceneLane(progress) {
+    const stops = [
+        [0, 1],
+        [0.28, 1],
+        [0.45, -1],
+        [0.64, 1],
+        [0.82, -1],
+        [1, -1],
+    ];
+
+    for (let index = 1; index < stops.length; index += 1) {
+        if (progress <= stops[index][0]) {
+            const [previousProgress, previousLane] = stops[index - 1];
+            const [nextProgress, nextLane] = stops[index];
+            const mix = smoothstep(previousProgress, nextProgress, progress);
+            return THREE.MathUtils.lerp(previousLane, nextLane, mix);
+        }
+    }
+
+    return stops[stops.length - 1][1];
 }
 
 function updateSceneFromScroll() {
@@ -250,14 +315,16 @@ function applySceneProgress(progress, elapsed) {
     const growth = smoothstep(0.34, 0.86, progress);
     const seedFade = 1 - smoothstep(0.48, 0.82, progress) * 0.78;
     const cameraWave = Math.sin(progress * Math.PI * 2);
+    const wind = reducedMotion ? 0 : Math.sin(elapsed * 1.35) * 0.035;
+    const desktopCameraDrift = 1.15;
 
     camera.position.z = (narrowScreen ? 25 : 22) - progress * (narrowScreen ? 9 : 13);
-    camera.position.x = (narrowScreen ? 0 : -4.5) + cameraWave * (narrowScreen ? 1.1 : 3.4);
+    camera.position.x = (narrowScreen ? 0 : -1.2) + cameraWave * (narrowScreen ? 0.65 : desktopCameraDrift);
     camera.position.y = 1.5 - progress * 4.5 + Math.sin(progress * Math.PI) * 1.4;
     camera.rotation.y = progress * (narrowScreen ? 0.18 : 0.34);
     camera.rotation.z = Math.sin(progress * Math.PI) * 0.025;
 
-    world.rotation.y = progress * 1.75;
+    world.rotation.y = progress * 0.24;
     world.rotation.x = Math.sin(progress * Math.PI) * 0.08;
 
     seedGroup.scale.setScalar(seedFade);
@@ -277,34 +344,29 @@ function applySceneProgress(progress, elapsed) {
     particles.rotation.y = progress * 0.72 + elapsed * (reducedMotion ? 0 : 0.015);
     particles.position.y = -progress * 3;
 
-    stemPivot.scale.y = 0.015 + growth * 0.985;
-    stemPivot.scale.x = 0.72 + growth * 0.28;
-    stemPivot.scale.z = 0.72 + growth * 0.28;
+    stemGrowth.scale.set(0.78 + growth * 0.22, 0.015 + growth * 0.985, 0.78 + growth * 0.22);
+    stemGrowth.rotation.z = wind * growth;
 
     branches.forEach((branch, index) => {
-        const branchGrowth = smoothstep(0.43 + index * 0.08, 0.75 + index * 0.06, progress);
+        const branchGrowth = smoothstep(branch.userData.start, branch.userData.start + 0.18, progress);
         branch.scale.set(branchGrowth, branchGrowth, branchGrowth);
+        branch.rotation.z = wind * (index % 2 === 0 ? 0.8 : -0.8);
     });
 
     leaves.forEach((leaf, index) => {
-        const leafGrowth = smoothstep(0.53 + index * 0.035, 0.86 + index * 0.02, progress);
-        const baseScale = leaf.parent === plantGroup ? [1.65, 0.34, 0.82] : [1.55, 0.3, 0.74];
-        leaf.scale.set(
-            baseScale[0] * leafGrowth,
-            baseScale[1] * leafGrowth,
-            baseScale[2] * leafGrowth
-        );
+        const leafGrowth = smoothstep(leaf.userData.start, leaf.userData.start + 0.14, progress);
+        const scale = leaf.userData.scale * leafGrowth;
+        leaf.scale.setScalar(scale);
+        leaf.rotation.z = leaf.userData.baseRotation + wind * (1.3 + index * 0.12);
     });
 
     groundRing.scale.setScalar(0.2 + growth * 0.8);
     groundRing.material.opacity = 0.12 + growth * 0.58;
-    const plantLaneProgress = smoothstep(0.64, 0.8, progress);
-    plantGroup.position.x = narrowScreen
-        ? -0.6
-        : THREE.MathUtils.lerp(6.2, -10, plantLaneProgress);
+    const sceneLane = getSceneLane(progress);
+    plantGroup.position.x = narrowScreen ? sceneLane * 1.4 : sceneLane * 7.2;
     plantGroup.position.z = narrowScreen
         ? -5
-        : THREE.MathUtils.lerp(-5, -8, plantLaneProgress);
+        : -5.2 - Math.abs(sceneLane) * 1.3;
     plantGroup.rotation.y = -0.6 + progress * 0.95;
 }
 
@@ -318,12 +380,12 @@ function publishDiagnostics() {
 }
 
 function animate() {
-    requestAnimationFrame(animate);
-
     if (!pageVisible) {
+        animationFrame = null;
         return;
     }
 
+    animationFrame = requestAnimationFrame(animate);
     currentProgress += (targetProgress - currentProgress) * 0.055;
     const elapsed = clock.getElapsedTime();
     applySceneProgress(currentProgress, elapsed);
@@ -355,6 +417,9 @@ document.addEventListener("visibilitychange", () => {
     pageVisible = !document.hidden;
     if (pageVisible) {
         clock.getDelta();
+        if (!reducedMotion && animationFrame === null) {
+            animate();
+        }
     }
 });
 

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#08100c">
     <title>Renzo's Creative Tech Studio</title>
-    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="style.css?v=6">
     <link rel="icon" href="techquitybanner-1130x160.png">
 </head>
 
@@ -21,17 +21,10 @@
     </div>
 
     <header class="site-nav">
-        <a class="site-brand" href="#top" aria-label="Renzo's Creative Tech Studio home">
+        <div class="site-brand" aria-label="Renzo Studio">
             <span class="brand-mark">R</span>
             <span>Renzo Studio</span>
-        </a>
-
-        <nav class="nav-links" aria-label="Portfolio sections">
-            <a href="#image-editing">Image Editing</a>
-            <a href="#blender">Blender</a>
-            <a href="#fusion">Fusion</a>
-            <a href="#animation">Animation</a>
-        </nav>
+        </div>
     </header>
 
     <main class="portfolio-story">
@@ -42,11 +35,6 @@
                 A collection of edited images, Blender models, Autodesk Fusion designs,
                 and a seed-to-sprout animation, presented as a growing digital world.
             </p>
-
-            <div class="hero-actions" aria-label="Portfolio shortcuts">
-                <a class="button button-primary" href="#animation" data-magnet>Watch Animation</a>
-                <a class="button button-secondary" href="#image-editing" data-magnet>View Gallery</a>
-            </div>
 
             <div class="studio-stats" aria-label="Portfolio highlights">
                 <div>
@@ -92,23 +80,7 @@
             </div>
         </section>
 
-        <aside class="story-panel panel-right reflection-panel" data-scene="reflection" data-reveal>
-            <span class="section-kicker">Process Notes</span>
-            <h2 data-scroll-float>Reflection</h2>
-            <p data-word-reveal>
-                In this topic I learnt how to edit images and make them look more professional.
-                I practised cropping, resizing, and improving the overall appearance of pictures.
-                What worked well was experimenting with different tools and seeing how small changes
-                could make a big difference.
-            </p>
-            <p data-word-reveal>
-                One challenge I had was choosing the best colours and effects without making the design
-                look messy. Next time, I would spend more time planning my design before editing so the
-                final result is even stronger.
-            </p>
-        </aside>
-
-        <section class="story-panel panel-left blender-panel" id="blender" data-scene="models" data-reveal>
+        <section class="story-panel panel-right blender-panel" id="blender" data-scene="models" data-reveal>
             <div class="panel-heading">
                 <span class="section-kicker">Topic 02</span>
                 <h2 data-scroll-float>Blender 3D Modelling</h2>
@@ -137,7 +109,7 @@
             </div>
         </section>
 
-        <section class="story-panel panel-right fusion-panel" id="fusion" data-scene="fusion" data-reveal>
+        <section class="story-panel panel-left fusion-panel" id="fusion" data-scene="fusion" data-reveal>
             <div class="panel-heading">
                 <span class="section-kicker">Topic 03</span>
                 <h2 data-scroll-float>Autodesk Fusion 360</h2>
@@ -161,7 +133,7 @@
             </div>
         </section>
 
-        <section class="story-panel panel-left growth-video" id="animation" data-scene="growth" data-reveal>
+        <section class="story-panel panel-right growth-video" id="animation" data-scene="growth" data-reveal>
             <div class="growth-copy">
                 <span class="section-kicker">Topic 04</span>
                 <h2 data-scroll-float>Seed to Sprout</h2>
@@ -192,7 +164,7 @@
         </footer>
     </main>
 
-    <script src="script.js?v=4"></script>
-    <script type="module" src="three-scene.js?v=4"></script>
+    <script src="script.js?v=5"></script>
+    <script type="module" src="three-scene.js?v=5"></script>
 </body>
 </html>

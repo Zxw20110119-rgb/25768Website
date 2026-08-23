@@ -88,28 +88,6 @@ function initializeTiltCards() {
     });
 }
 
-function initializeMagnetButtons() {
-    if (motionReduced || !precisePointer) {
-        return;
-    }
-
-    document.querySelectorAll("[data-magnet]").forEach((button) => {
-        button.addEventListener("pointermove", (event) => {
-            const rect = button.getBoundingClientRect();
-            const x = event.clientX - (rect.left + rect.width / 2);
-            const y = event.clientY - (rect.top + rect.height / 2);
-
-            button.style.setProperty("--magnet-x", `${(x * 0.16).toFixed(2)}px`);
-            button.style.setProperty("--magnet-y", `${(y * 0.16).toFixed(2)}px`);
-        });
-
-        button.addEventListener("pointerleave", () => {
-            button.style.setProperty("--magnet-x", "0px");
-            button.style.setProperty("--magnet-y", "0px");
-        });
-    });
-}
-
 function initializeActivePanelGlow() {
     const panels = [...document.querySelectorAll(".story-panel")];
 
@@ -168,7 +146,6 @@ window.addEventListener("resize", requestScrollProgressUpdate);
 updateScrollProgress();
 initializeAnimatedText();
 initializeTiltCards();
-initializeMagnetButtons();
 initializeActivePanelGlow();
 
 if ("IntersectionObserver" in window) {
@@ -190,34 +167,6 @@ if ("IntersectionObserver" in window) {
     revealItems.forEach((item) => revealObserver.observe(item));
 } else {
     revealItems.forEach((item) => item.classList.add("is-visible"));
-}
-
-const navLinks = [...document.querySelectorAll(".nav-links a")];
-const sections = navLinks
-    .map((link) => document.querySelector(link.getAttribute("href")))
-    .filter(Boolean);
-
-if ("IntersectionObserver" in window && sections.length > 0) {
-    const navObserver = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (!entry.isIntersecting) {
-                    return;
-                }
-
-                navLinks.forEach((link) => {
-                    const isActive = link.getAttribute("href") === `#${entry.target.id}`;
-                    link.classList.toggle("is-active", isActive);
-                });
-            });
-        },
-        {
-            rootMargin: "-35% 0px -50% 0px",
-            threshold: 0,
-        }
-    );
-
-    sections.forEach((section) => navObserver.observe(section));
 }
 
 document.querySelectorAll(".growth-video video").forEach((video) => {
