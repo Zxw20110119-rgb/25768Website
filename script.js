@@ -1,192 +1,83 @@
-document.documentElement.classList.add("js");
+/* Progressive enhancement: content, media links and navigation work without JS. */
+(() => {
+  "use strict";
 
-const revealItems = document.querySelectorAll("[data-reveal]");
-const root = document.documentElement;
-const motionReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-const precisePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-let scrollFrame = null;
+  function initializeLightbox() {
+    const dialog = document.querySelector("#lightbox");
+    if (!dialog || typeof dialog.showModal !== "function") return;
+    const image = document.querySelector("#lightbox-image");
+    const caption = document.querySelector("#lightbox-caption");
+    let opener = null;
+    document.querySelectorAll("[data-lightbox]").forEach(link => {
+      link.addEventListener("click", event => {
+        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        opener = link;
+        image.src = link.href;
+        image.alt = link.querySelector("img").alt;
+        caption.textContent = image.alt;
+        dialog.showModal();
+        document.body.classList.add("has-lightbox");
+      });
+    });
+    dialog.addEventListener("click", event => {
+      const rect = dialog.getBoundingClientRect();
+      if (event.target === dialog && (event.clientX < rect.left || event.clientX > rect.right ||
+          event.clientY < rect.top || event.clientY > rect.bottom)) dialog.close();
+    });
+    dialog.addEventListener("close", () => {
+      document.body.classList.remove("has-lightbox");
+      image.removeAttribute("src");
+      opener?.focus();
+    });
+  }
 
-function wrapAnimatedWords(element, wordClass) {
-    const text = element.textContent.replace(/\s+/g, " ").trim();
+  function initializeGame() {
+    const start = document.querySelector("#start-game");
+    const stop = document.querySelector("#stop-game");
+    const shell = document.querySelector("#game-shell");
+    const placeholder = document.querySelector("#game-placeholder");
+    const status = document.querySelector("#game-status");
+    if (!start || !stop || !shell || !placeholder || !status) return;
+    let frame = null;
+    let loadTimeout = null;
 
-    element.setAttribute("aria-label", text);
-    element.textContent = "";
-
-    text.split(" ").forEach((word, index) => {
-        if (index > 0) {
-            element.append(" ");
-        }
-
-        const span = document.createElement("span");
-        span.className = wordClass;
-        span.textContent = word;
-        span.setAttribute("aria-hidden", "true");
-        span.style.setProperty("--word-index", index);
-        element.append(span);
+    start.addEventListener("click", event => {
+      if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      event.preventDefault();
+      if (frame) return;
+      frame = document.createElement("iframe");
+      frame.title = "Sunny Advice — GDevelop game";
+      frame.allow = "autoplay; fullscreen; gamepad";
+      frame.allowFullscreen = true;
+      frame.src = start.href;
+      frame.addEventListener("load", () => {
+        clearTimeout(loadTimeout);
+        status.textContent = "Game page opened. Click inside to play. Use Stop game to return to the portfolio.";
+        frame?.focus({ preventScroll: true });
+      }, { once: true });
+      status.textContent = "Opening game…";
+      placeholder.hidden = true;
+      shell.classList.add("is-playing");
+      stop.hidden = false;
+      loadTimeout = setTimeout(() => {
+        status.textContent = "Still loading? Try Open in new tab, or stop the game and try again.";
+      }, 15000);
+      shell.append(frame);
     });
 
-    element.classList.add("animated-text-ready");
-}
-
-function initializeAnimatedText() {
-    const floatText = document.querySelectorAll("[data-scroll-float]");
-    const revealText = document.querySelectorAll("[data-word-reveal]");
-    const animatedText = [];
-
-    floatText.forEach((element) => {
-        wrapAnimatedWords(element, "float-word");
-        animatedText.push(element);
+    stop.addEventListener("click", () => {
+      clearTimeout(loadTimeout);
+      frame?.remove();
+      frame = null;
+      shell.classList.remove("is-playing");
+      placeholder.hidden = false;
+      stop.hidden = true;
+      status.textContent = "Game stopped. Play game starts a new session.";
+      start.focus({ preventScroll: true });
     });
+  }
 
-    revealText.forEach((element) => {
-        wrapAnimatedWords(element, "reveal-word");
-        animatedText.push(element);
-    });
-
-    if (motionReduced || !("IntersectionObserver" in window)) {
-        animatedText.forEach((element) => element.classList.add("is-text-visible"));
-        return;
-    }
-
-    const textObserver = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("is-text-visible");
-                    textObserver.unobserve(entry.target);
-                }
-            });
-        },
-        {
-            rootMargin: "0px 0px -8% 0px",
-            threshold: 0.12,
-        }
-    );
-
-    animatedText.forEach((element) => textObserver.observe(element));
-}
-
-function initializeTiltCards() {
-    if (motionReduced || !precisePointer) {
-        return;
-    }
-
-    document.querySelectorAll("[data-tilt]").forEach((card) => {
-        card.addEventListener("pointermove", (event) => {
-            const rect = card.getBoundingClientRect();
-            const x = (event.clientX - rect.left) / rect.width - 0.5;
-            const y = (event.clientY - rect.top) / rect.height - 0.5;
-
-            card.style.setProperty("--tilt-x", `${(-y * 7).toFixed(2)}deg`);
-            card.style.setProperty("--tilt-y", `${(x * 7).toFixed(2)}deg`);
-        });
-
-        card.addEventListener("pointerleave", () => {
-            card.style.setProperty("--tilt-x", "0deg");
-            card.style.setProperty("--tilt-y", "0deg");
-        });
-    });
-}
-
-function initializeActivePanelGlow() {
-    const panels = [...document.querySelectorAll(".story-panel")];
-
-    if (!("IntersectionObserver" in window) || panels.length === 0) {
-        panels[0]?.classList.add("is-scene-active");
-        return;
-    }
-
-    const panelVisibility = new Map(panels.map((panel) => [panel, 0]));
-    const activePanelObserver = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                panelVisibility.set(entry.target, entry.isIntersecting ? entry.intersectionRatio : 0);
-            });
-
-            let activePanel = null;
-            let highestVisibility = 0;
-
-            panelVisibility.forEach((visibility, panel) => {
-                if (visibility > highestVisibility) {
-                    highestVisibility = visibility;
-                    activePanel = panel;
-                }
-            });
-
-            panels.forEach((panel) => {
-                panel.classList.toggle("is-scene-active", panel === activePanel);
-            });
-        },
-        {
-            rootMargin: "-18% 0px -28% 0px",
-            threshold: [0, 0.08, 0.2, 0.4, 0.6],
-        }
-    );
-
-    panels.forEach((panel) => activePanelObserver.observe(panel));
-}
-
-function updateScrollProgress() {
-    const maxScroll = Math.max(1, root.scrollHeight - window.innerHeight);
-    const progress = Math.min(1, Math.max(0, window.scrollY / maxScroll));
-
-    root.style.setProperty("--scroll-progress", progress.toFixed(4));
-    root.dataset.scrollProgress = progress.toFixed(3);
-    scrollFrame = null;
-}
-
-function requestScrollProgressUpdate() {
-    if (scrollFrame === null) {
-        scrollFrame = window.requestAnimationFrame(updateScrollProgress);
-    }
-}
-
-window.addEventListener("scroll", requestScrollProgressUpdate, { passive: true });
-window.addEventListener("resize", requestScrollProgressUpdate);
-updateScrollProgress();
-initializeAnimatedText();
-initializeTiltCards();
-initializeActivePanelGlow();
-
-if ("IntersectionObserver" in window) {
-    const revealObserver = new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add("is-visible");
-                    revealObserver.unobserve(entry.target);
-                }
-            });
-        },
-        {
-            rootMargin: "0px 0px -2% 0px",
-            threshold: 0.05,
-        }
-    );
-
-    revealItems.forEach((item) => revealObserver.observe(item));
-} else {
-    revealItems.forEach((item) => item.classList.add("is-visible"));
-}
-
-document.querySelectorAll(".growth-video video").forEach((video) => {
-    const panel = video.closest(".growth-video");
-
-    video.addEventListener("play", () => {
-        panel.classList.add("is-playing");
-    });
-
-    video.addEventListener("pause", () => {
-        panel.classList.remove("is-playing");
-    });
-
-    video.addEventListener("ended", () => {
-        panel.classList.remove("is-playing");
-    });
-});
-
-window.setTimeout(() => {
-    if (document.documentElement.dataset.threeReady !== "true") {
-        document.body.classList.add("is-webgl-unavailable");
-    }
-}, 5000);
+  initializeLightbox();
+  initializeGame();
+})();
