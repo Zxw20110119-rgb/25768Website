@@ -104,8 +104,6 @@
   kbd { font: inherit; display: inline-block; border: 1px solid var(--color-line); border-radius: 3px; padding: 0 .3rem; }
   .game-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; }
   .game-status { font-size: .8rem; color: var(--color-muted); margin-top: .5rem; }
-  .tool-list { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: var(--space-4); }
-  .tool-list span { border: 1px solid var(--color-line); border-radius: 2rem; padding: .35rem .85rem; font-size: .75rem; color: var(--color-muted); }
   .site-footer p { font-size: .75rem; color: var(--color-muted); }
   .lightbox { width: min(1100px, 94vw); max-height: 92dvh; padding: 1rem; border: 1px solid var(--color-line); border-radius: var(--radius); background: var(--color-paper); }
   .lightbox::backdrop { background: rgb(20 25 20 / .8); }
